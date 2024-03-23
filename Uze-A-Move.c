@@ -462,24 +462,24 @@ void draw_arrow( unsigned char x, unsigned char y, unsigned char player ) {
 	if( angle[player] >= 0 ) {
 		sprites[SPRITE_ARROW+player].tileIndex = TILE_ARROW + ((angle[player]+2)/5);
 	
-		sprites[SPRITE_ARROW+player].x = x + pgm_read_byte( arrow_x + angle[player] ) -4;
-		sprites[SPRITE_RING+player ].x = x + pgm_read_byte(  ring_x + angle[player] ) -4;
-		sprites[SPRITE_RIVET+player].x = x + pgm_read_byte( rivet_x + angle[player] ) -4;
+		sprites[SPRITE_ARROW+player].x = x + pgm_read_byte( &arrow_x[abs(angle[player])] ) -4;
+		sprites[SPRITE_RING+player ].x = x + pgm_read_byte(  &ring_x[abs(angle[player])] ) -4;
+		sprites[SPRITE_RIVET+player].x = x + pgm_read_byte( &rivet_x[abs(angle[player])] ) -4;
 
-		sprites[SPRITE_ARROW+player].y = y - pgm_read_byte( arrow_y + angle[player] ) -2;
-		sprites[SPRITE_RING+player ].y = y - pgm_read_byte(  ring_y + angle[player] ) -5;
-		sprites[SPRITE_RIVET+player].y = y - pgm_read_byte( rivet_y + angle[player] ) -3;
+		sprites[SPRITE_ARROW+player].y = y - pgm_read_byte( &arrow_y[abs(angle[player])] ) -2;
+		sprites[SPRITE_RING+player ].y = y - pgm_read_byte(  &ring_y[abs(angle[player])] ) -5;
+		sprites[SPRITE_RIVET+player].y = y - pgm_read_byte( &rivet_y[abs(angle[player])] ) -3;
 	}
 	else {
 		sprites[SPRITE_ARROW+player].tileIndex = TILE_ARROW + ((angle[player]-2)/5);
 
-		sprites[SPRITE_ARROW+player].x = x - pgm_read_byte( arrow_x - angle[player] ) -4;
-		sprites[SPRITE_RING+player ].x = x - pgm_read_byte(  ring_x - angle[player] ) -4;
-		sprites[SPRITE_RIVET+player].x = x - pgm_read_byte( rivet_x - angle[player] ) -4;
+		sprites[SPRITE_ARROW+player].x = x - pgm_read_byte( &arrow_x[abs(angle[player])] ) -4;
+		sprites[SPRITE_RING+player ].x = x - pgm_read_byte(  &ring_x[abs(angle[player])] ) -4;
+		sprites[SPRITE_RIVET+player].x = x - pgm_read_byte( &rivet_x[abs(angle[player])] ) -4;
 
-		sprites[SPRITE_ARROW+player].y = y - pgm_read_byte( arrow_y - angle[player] ) -2;
-		sprites[SPRITE_RING+player ].y = y - pgm_read_byte(  ring_y - angle[player] ) -5;
-		sprites[SPRITE_RIVET+player].y = y - pgm_read_byte( rivet_y - angle[player] ) -3;
+		sprites[SPRITE_ARROW+player].y = y - pgm_read_byte( &arrow_y[abs(angle[player])] ) -2;
+		sprites[SPRITE_RING+player ].y = y - pgm_read_byte(  &ring_y[abs(angle[player])] ) -5;
+		sprites[SPRITE_RIVET+player].y = y - pgm_read_byte( &rivet_y[abs(angle[player])] ) -3;
 	}
 }
 
@@ -648,18 +648,18 @@ bool update_projectile( unsigned char player ) {
 	int candidate;
 
 	if( firing[player] ) {
-		proj[player].y -= pgm_read_byte( traj_y + proj[player].angle );
+		proj[player].y -= pgm_read_byte( &traj_y[abs(proj[player].angle)] );
 	
 		if( proj[player].angle >= 0 ) {
 			int edge = ((FIELD_TILES_H*TILE_WIDTH)-BUBBLE_WIDTH) << TRAJ_SHIFT;
-			proj[player].x += pgm_read_byte( traj_x + proj[player].angle );
+			proj[player].x += pgm_read_byte( &traj_x[abs(proj[player].angle)] );
 			if( proj[player].x >= edge ) {
 				proj[player].x = edge - (proj[player].x-edge);
 				proj[player].angle = -proj[player].angle;
 			}
 		}
 		else {
-			proj[player].x -= pgm_read_byte( traj_x - proj[player].angle );
+			proj[player].x -= pgm_read_byte( &traj_x[abs(proj[player].angle)] );
 			if( proj[player].x < 0 ) {
 				proj[player].x = 0 - proj[player].x;
 				proj[player].angle = -proj[player].angle;
